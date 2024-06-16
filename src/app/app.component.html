@@ -1,0 +1,85 @@
+<!-- invoice.component.html -->
+<div class="parent-container">
+    <div class="left-grid mat-elevation-z2">
+      <div class="header">
+        <div class="header-left">
+          <p><b>Current Date:</b> {{ currentDate }}</p>
+        </div>
+        <div class="header-right">
+          <p><b>Invoice Number:</b> {{ invoiceNumber }}</p>
+        </div>
+      </div>
+      <hr class="separator">
+      <h2 class="invoice-title">INVOICE</h2>
+      <div class="form-section">
+        <mat-form-field class="form-field">
+          <mat-label>Cashier</mat-label>
+          <input matInput [(ngModel)]="cashier">
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <mat-label>Customer</mat-label>
+          <input matInput [(ngModel)]="customer">
+        </mat-form-field>
+      </div>
+      <table mat-table class="item-table" [dataSource]="items">
+        <!-- Item table columns -->
+        <ng-container matColumnDef="item">
+          <th mat-header-cell *matHeaderCellDef><b>ITEM</b></th>
+          <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef><b>QTY</b></th>
+          <td mat-cell *matCellDef="let item">{{ item.quantity }}</td>
+        </ng-container>
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef><b>PRICE</b></th>
+          <td mat-cell *matCellDef="let item">{{ item.price | currency }}</td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef><b>ACTION</b></th>
+          <td mat-cell *matCellDef="let item">
+            <button mat-icon-button color="warn" (click)="deleteItem(item)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <button mat-raised-button color="primary" (click)="addItem()">Add Item</button>
+      <div class="subtotal-section">
+        <div class="subtotal-item">
+          <p><b>Subtotal:</b></p>
+          <p>{{ calculateSubtotal() | currency }}</p>
+        </div>
+        <div class="subtotal-item">
+          <p><b>Discount:</b></p>
+          <p>{{ discount }}</p>
+        </div>
+        
+        <div class="subtotal-item">
+          <p><b>Tax:</b></p>
+          <p>{{ calculateTax() | currency }}</p>
+        </div>
+        <hr class="separator">
+        <div class="subtotal-item">
+          <p><b>Total:</b></p>
+          <p>{{ calculateTotal() | currency }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="right-grid mat-elevation-z2">
+      <div class="but-div">
+        <button class="review-button" mat-raised-button color="primary">Review Invoice</button>
+      </div>
+      <mat-form-field class="tax-rate-section">
+        <mat-label>Tax Rate (%)</mat-label>
+        <input matInput type="number" [(ngModel)]="taxRate">
+      </mat-form-field>
+      <mat-form-field class="discount-rate-section">
+        <mat-label>Discount Rate (%)</mat-label>
+        <input matInput type="number" [(ngModel)]="discountRate">
+      </mat-form-field>
+    </div>
+  </div>
+  
